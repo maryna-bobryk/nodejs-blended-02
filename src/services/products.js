@@ -1,9 +1,24 @@
 import { ProductsCollection } from '../db/models/products.js';
 
-export const getAllProducts = async () => {
-  const products = await ProductsCollection.find();
-  console.log('Produkte aus DB:', products);
-  return products;
+export const getAllProducts = async (filter = {}) => {
+  const { category, minPrice, maxPrice } = filter;
+
+  const productsQuery = ProductsCollection.find();
+
+  if (category) {
+    productsQuery.where('category').equals(category);
+  }
+
+  if (minPrice !== undefined) {
+    productsQuery.where('price').gte(minPrice);
+  }
+
+  if (maxPrice !== undefined) {
+    productsQuery.where('price').lte(maxPrice);
+  }
+
+  const products = await productsQuery.exec();
+  return { data: products };
 };
 
 export const getProductById = async (productId) => {
