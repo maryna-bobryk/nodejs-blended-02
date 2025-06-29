@@ -4,7 +4,8 @@ import cors from 'cors';
 import { env } from './utils/env.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
-import productsRouter from './routers/products.js';
+import router from './routers/index.js';
+import cookieParser from 'cookie-parser';
 
 const PORT = Number(env('PORT', '4000'));
 
@@ -13,6 +14,7 @@ export const setupServer = () => {
 
   app.use(express.json());
   app.use(cors());
+  app.use(cookieParser());
 
   app.get('/', (req, res) => {
     res.status(200).json({
@@ -20,7 +22,7 @@ export const setupServer = () => {
     });
   });
 
-  app.use(productsRouter);
+  app.use(router);
   app.use(notFoundHandler);
   app.use(errorHandler);
 

@@ -3,20 +3,19 @@ const parceCategory = (category) => {
   if (!isString) return;
   const isCategory = (category) =>
     ['books', 'electronics', 'clothing', 'other'].includes(category);
-  if (isCategory(category)) return category;
+  if (isCategory) return category;
 };
 
 const parseNumber = (number) => {
   const isString = typeof number === 'string';
   if (!isString) return;
 
-  const parsedNumber = parseFloat(number);
-  return isNaN(parsedNumber) || parsedNumber < 0 ? undefined : parsedNumber;
+  const parsedNumber = Number(number);
+  if (Number.isNaN(parsedNumber)) return;
+  return parsedNumber;
 };
 
-export const parseFilterParams = (query) => {
-  const { category, minPrice, maxPrice } = query;
-
+export const parseFilterParams = ({ category, minPrice, maxPrice }) => {
   const parsedCategory = parceCategory(category);
   const parsedMinPrice = parseNumber(minPrice);
   const parsedMaxPrice = parseNumber(maxPrice);
